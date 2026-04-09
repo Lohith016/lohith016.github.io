@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lohith Reddy — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── THEME TOKENS ── */
+    :root {
+      --transition-theme: 0.55s cubic-bezier(0.77, 0, 0.175, 1);
+      --bg:        #f9f9f7;
+      --bg-card:   #ececea;
+      --fg:        #0a0a0a;
+      --fg-muted:  #7a7a7a;
+      --border:    #ddddd8;
+      --chip-bg:   #e4e4e0;
+      --nav-blur:  rgba(249,249,247,0.92);
+    }
+    [data-theme="dark"] {
+      --bg:        #0c0c0c;
+      --bg-card:   #161616;
+      --fg:        #f0f0ee;
+      --fg-muted:  #5a5a5a;
+      --border:    #222220;
+      --chip-bg:   #1e1e1c;
+      --nav-blur:  rgba(12,12,12,0.92);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--fg);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      transition: background var(--transition-theme), color var(--transition-theme);
+    }
+
+    /* ══ INK RIPPLE OVERLAY ══ */
+    #theme-ripple {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 50%;
+      width: 1px; height: 1px;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+    }
+    #theme-ripple.expanding {
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.1s;
+      opacity: 1;
+    }
+
+    /* ══ THEME TOGGLE BUTTON ══ */
+    #theme-toggle {
+      position: relative;
+      width: 58px; height: 28px;
+      cursor: pointer;
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0;
+      flex-shrink: 0;
+      transition: border-color var(--transition-theme);
+      overflow: hidden;
+    }
+    #theme-toggle:hover { border-color: var(--fg); }
+
+    .toggle-icons {
+      position: absolute; inset: 0;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 6px;
+      pointer-events: none;
+    }
+    .ico { font-size: 11px; line-height: 1; }
+    .ico-sun  { color: #c8a84b; }
+    .ico-moon { color: #7a9ec4; }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 20px; height: 20px;
+      background: var(--fg);
+      transition: left 0.45s cubic-bezier(0.77, 0, 0.175, 1),
+                  background var(--transition-theme);
+    }
+    [data-theme="dark"] .toggle-thumb { left: 32px; }
+
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 4rem;
+      background: var(--nav-blur);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition-theme), border-color var(--transition-theme);
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem; letter-spacing: -0.02em;
+    }
+    .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--fg-muted);
+      font-size: 0.73rem; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--fg); }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border); padding-top: 4.5rem;
+      transition: border-color var(--transition-theme);
+    }
+    .hero-left {
+      padding: 8rem 4rem 6rem;
+      display: flex; flex-direction: column; justify-content: center;
+      border-right: 1px solid var(--border);
+      transition: border-color var(--transition-theme);
+    }
+    .hero-tag {
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--fg-muted); margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+    }
+    .hero-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.6s 0.25s forwards;
+    }
+    .hero-desc {
+      color: var(--fg-muted); font-size: 0.85rem;
+      max-width: 34ch; line-height: 1.9;
+      opacity: 0; animation: fadeUp 0.6s 0.4s forwards;
+      transition: color var(--transition-theme);
+    }
+    .hero-cta {
+      margin-top: 3rem; display: flex; gap: 1rem;
+      opacity: 0; animation: fadeUp 0.6s 0.55s forwards;
+    }
+    .btn {
+      display: inline-block; padding: 0.75rem 1.8rem;
+      font-family: 'DM Mono', monospace; font-size: 0.73rem;
+      letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+      border: 1px solid var(--fg); color: var(--fg); cursor: pointer;
+      transition: background 0.25s, color 0.25s, border-color var(--transition-theme);
+    }
+    .btn:hover { background: var(--fg); color: var(--bg); }
+    .btn-fill { background: var(--fg); color: var(--bg); }
+    .btn-fill:hover { background: transparent; color: var(--fg); }
+
+    .hero-right {
+      padding: 8rem 4rem 6rem;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      opacity: 0; animation: fadeIn 0.8s 0.5s forwards;
+    }
+    .hero-stat {
+      border-top: 1px solid var(--border); padding: 1.8rem 0;
+      transition: border-color var(--transition-theme);
+    }
+    .hero-stat:last-child { border-bottom: 1px solid var(--border); }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.8rem; letter-spacing: -0.04em; line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.7rem; color: var(--fg-muted);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.4rem;
+      transition: color var(--transition-theme);
+    }
+
+    /* ══ SECTIONS ══ */
+    section { border-bottom: 1px solid var(--border); transition: border-color var(--transition-theme); }
+    .section-header {
+      display: grid; grid-template-columns: 240px 1fr;
+      padding: 3.5rem 4rem; border-bottom: 1px solid var(--border); align-items: baseline;
+      transition: border-color var(--transition-theme);
+    }
+    .section-label {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--fg-muted); transition: color var(--transition-theme);
+    }
+    .section-title { font-family: 'DM Serif Display', serif; font-size: 2rem; letter-spacing: -0.02em; }
+
+    /* ══ EXPERIENCE ══ */
+    .exp-item {
+      display: grid; grid-template-columns: 240px 1fr;
+      padding: 3rem 4rem; border-bottom: 1px solid var(--border);
+      transition: background 0.2s, border-color var(--transition-theme);
+    }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-item:hover { background: var(--bg-card); }
+    .exp-date { font-size: 0.7rem; color: var(--fg-muted); letter-spacing: 0.08em; margin-bottom: 0.5rem; transition: color var(--transition-theme); }
+    .exp-company { font-size: 0.78rem; color: var(--fg-muted); transition: color var(--transition-theme); }
+    .exp-role { font-family: 'DM Serif Display', serif; font-size: 1.4rem; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .exp-desc { font-size: 0.82rem; color: var(--fg-muted); line-height: 1.9; transition: color var(--transition-theme); }
+    .exp-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+    .tag {
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.8rem; border: 1px solid var(--border); color: var(--fg-muted);
+      transition: border-color var(--transition-theme), color var(--transition-theme);
+    }
+
+    /* ══ SKILLS ══ */
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .skill-group {
+      padding: 2.8rem 4rem; border-bottom: 1px solid var(--border);
+      transition: border-color var(--transition-theme);
+    }
+    .skill-group:nth-child(odd) { border-right: 1px solid var(--border); }
+    .skill-group-label {
+      font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--fg-muted); margin-bottom: 1.2rem; transition: color var(--transition-theme);
+    }
+    .skill-items { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .skill-chip {
+      font-size: 0.78rem; padding: 0.4rem 1rem;
+      background: var(--chip-bg); border: 1px solid var(--border);
+      transition: background var(--transition-theme), border-color var(--transition-theme);
+    }
+
+    /* ══ EDUCATION ══ */
+    .edu-item {
+      display: grid; grid-template-columns: 240px 1fr;
+      padding: 2.5rem 4rem; border-bottom: 1px solid var(--border);
+      transition: border-color var(--transition-theme);
+    }
+    .edu-item:last-child { border-bottom: none; }
+    .edu-year { font-size: 0.7rem; color: var(--fg-muted); letter-spacing: 0.08em; transition: color var(--transition-theme); }
+    .edu-degree { font-family: 'DM Serif Display', serif; font-size: 1.2rem; margin-bottom: 0.3rem; }
+    .edu-school { font-size: 0.78rem; color: var(--fg-muted); transition: color var(--transition-theme); }
+    .edu-score { font-size: 0.73rem; color: var(--fg-muted); margin-top: 0.3rem; transition: color var(--transition-theme); }
+
+    /* ══ CERTS ══ */
+    .cert-grid { display: grid; grid-template-columns: repeat(3,1fr); }
+    .cert-item {
+      padding: 2rem 2.5rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      transition: background 0.2s, border-color var(--transition-theme);
+    }
+    .cert-item:hover { background: var(--bg-card); }
+    .cert-item:nth-child(3n) { border-right: none; }
+    .cert-num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--border); line-height: 1; margin-bottom: 0.8rem; transition: color var(--transition-theme); }
+    .cert-name { font-size: 0.8rem; line-height: 1.5; }
+    .cert-org { font-size: 0.68rem; color: var(--fg-muted); margin-top: 0.3rem; transition: color var(--transition-theme); }
+
+    /* ══ CONTACT ══ */
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; }
+    .contact-left { padding: 5rem 4rem; border-right: 1px solid var(--border); transition: border-color var(--transition-theme); }
+    .contact-heading { font-family: 'DM Serif Display', serif; font-size: 2.8rem; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 2rem; }
+    .contact-right { padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center; gap: 2rem; }
+    .contact-row {
+      display: flex; flex-direction: column; gap: 0.3rem;
+      border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;
+      transition: border-color var(--transition-theme);
+    }
+    .contact-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .contact-row-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); transition: color var(--transition-theme); }
+    .contact-row-val { font-size: 0.88rem; }
+    a.contact-link { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--border); transition: border-color 0.2s, color var(--transition-theme); }
+    a.contact-link:hover { border-color: var(--fg); }
+
+    /* ══ FOOTER ══ */
+    footer {
+      padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.68rem; color: var(--fg-muted); letter-spacing: 0.08em;
+      transition: color var(--transition-theme);
+    }
+
+    /* ══ ANIMATIONS ══ */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    /* ══ RESPONSIVE ══ */
+    @media(max-width:768px){
+      nav{padding:1rem 1.2rem;}
+      .nav-links{display:none;}
+      .hero,.contact-inner{grid-template-columns:1fr;}
+      .hero-left{padding:7rem 1.5rem 3rem;border-right:none;}
+      .hero-right{padding:2rem 1.5rem 4rem;}
+      .section-header,.exp-item,.edu-item{grid-template-columns:1fr;}
+      .section-header{padding:2rem 1.5rem;}
+      .exp-item{padding:2rem 1.5rem;}
+      .edu-item{padding:2rem 1.5rem;}
+      .skills-grid{grid-template-columns:1fr;}
+      .skill-group{padding:2rem 1.5rem;}
+      .skill-group:nth-child(odd){border-right:none;}
+      .cert-grid{grid-template-columns:1fr 1fr;}
+      .contact-left{padding:3rem 1.5rem;border-right:none;}
+      .contact-right{padding:2rem 1.5rem 3rem;}
+      footer{padding:1.5rem;flex-direction:column;gap:0.4rem;text-align:center;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INK RIPPLE -->
+  <div id="theme-ripple"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Lohith</div>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#experience">Work</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button id="theme-toggle" aria-label="Toggle theme">
+        <div class="toggle-icons">
+          <span class="ico ico-sun">☀</span>
+          <span class="ico ico-moon">☽</span>
+        </div>
+        <div class="toggle-thumb"></div>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <p class="hero-tag">Full Stack &amp; Mobile Developer</p>
+      <h1 class="hero-name">Kandukuru<br>Lohith<br>Reddy</h1>
+      <p class="hero-desc">Building scalable applications with modern frameworks — from web to mobile. Passionate about clean code and optimized performance.</p>
+      <div class="hero-cta">
+        <a href="#experience" class="btn btn-fill">View Work</a>
+        <a href="#contact" class="btn">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat"><div class="stat-num">3+</div><div class="stat-label">Years of Building</div></div>
+      <div class="hero-stat"><div class="stat-num">6</div><div class="stat-label">Certifications</div></div>
+      <div class="hero-stat"><div class="stat-num">3</div><div class="stat-label">Languages Spoken</div></div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-header reveal"><span class="section-label">Work</span><h2 class="section-title">Experience</h2></div>
+    <div class="exp-item reveal">
+      <div><div class="exp-date">Jan 2025 — Present</div><div class="exp-company">Techlathon</div></div>
+      <div>
+        <div class="exp-role">Full Stack Developer</div>
+        <p class="exp-desc">Working on full-stack development, building and shipping scalable web applications with modern technologies.</p>
+        <div class="exp-tags"><span class="tag">Full Stack</span><span class="tag">Web Dev</span></div>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div><div class="exp-date">Jun 2024 — Jul 2024</div><div class="exp-company">Null Class</div></div>
+      <div>
+        <div class="exp-role">Project Intern — Web Design &amp; Dev</div>
+        <p class="exp-desc">Developed a company portfolio website with a rewards system. Delivered an optimized front-end and integrated data storage with authentication.</p>
+        <div class="exp-tags"><span class="tag">React.js</span><span class="tag">Next.js</span><span class="tag">Tailwind</span><span class="tag">MongoDB</span><span class="tag">Firebase</span></div>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div><div class="exp-date">Completed Apr 2024</div><div class="exp-company">Infosys Springboard</div></div>
+      <div>
+        <div class="exp-role">Full Stack Development Intern</div>
+        <p class="exp-desc">Gained hands-on full-stack experience building a dynamic web application following best coding practices across backend and database layers.</p>
+        <div class="exp-tags"><span class="tag">Node.js</span><span class="tag">Django</span><span class="tag">PostgreSQL</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-header reveal"><span class="section-label">Capabilities</span><h2 class="section-title">Skills</h2></div>
+    <div class="skills-grid">
+      <div class="skill-group reveal"><div class="skill-group-label">Languages</div><div class="skill-items"><span class="skill-chip">Python</span><span class="skill-chip">Java</span><span class="skill-chip">Go</span></div></div>
+      <div class="skill-group reveal"><div class="skill-group-label">Frameworks &amp; Libraries</div><div class="skill-items"><span class="skill-chip">React.js</span><span class="skill-chip">Next.js</span><span class="skill-chip">Node.js</span></div></div>
+      <div class="skill-group reveal"><div class="skill-group-label">Databases</div><div class="skill-items"><span class="skill-chip">MongoDB</span><span class="skill-chip">MySQL</span><span class="skill-chip">PostgreSQL</span></div></div>
+      <div class="skill-group reveal"><div class="skill-group-label">Tools &amp; Technologies</div><div class="skill-items"><span class="skill-chip">Git</span><span class="skill-chip">Docker</span><span class="skill-chip">GitHub</span><span class="skill-chip">Turbo</span><span class="skill-chip">pnpm</span></div></div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-header reveal"><span class="section-label">Background</span><h2 class="section-title">Education</h2></div>
+    <div class="edu-item reveal"><div class="edu-year">2025 (Expected)</div><div><div class="edu-degree">B.E. in Computer Science &amp; Engineering</div><div class="edu-school">Adhiyamaan College of Engineering, Hosur</div><div class="edu-score">CGPA — 6.98</div></div></div>
+    <div class="edu-item reveal"><div class="edu-year">2021</div><div><div class="edu-degree">Intermediate</div><div class="edu-school">Narayana Junior College, Anantapur, AP</div><div class="edu-score">Score — 658</div></div></div>
+    <div class="edu-item reveal"><div class="edu-year">2019</div><div><div class="edu-degree">SSC</div><div class="edu-school">Sri Chaitanya Techno School, Anantapur, AP</div><div class="edu-score">Score — 95%</div></div></div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section>
+    <div class="section-header reveal"><span class="section-label">Achievements</span><h2 class="section-title">Certifications</h2></div>
+    <div class="cert-grid">
+      <div class="cert-item reveal"><div class="cert-num">01</div><div class="cert-name">Full Stack Development</div><div class="cert-org">Infosys Springboard</div></div>
+      <div class="cert-item reveal"><div class="cert-num">02</div><div class="cert-name">Web Design, Development &amp; Hosting</div><div class="cert-org">—</div></div>
+      <div class="cert-item reveal"><div class="cert-num">03</div><div class="cert-name">Full Stack Development with Django</div><div class="cert-org">Udemy</div></div>
+      <div class="cert-item reveal"><div class="cert-num">04</div><div class="cert-name">Ethical AI</div><div class="cert-org">Infosys Springboard</div></div>
+      <div class="cert-item reveal"><div class="cert-num">05</div><div class="cert-name">Introduction to Cybersecurity</div><div class="cert-org">Cisco Networking Academy</div></div>
+      <div class="cert-item reveal"><div class="cert-num">06</div><div class="cert-name">Smart India Hackathon Participant</div><div class="cert-org">SIH 2023</div></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="contact-left reveal">
+        <h2 class="contact-heading">Let's work<br>together.</h2>
+        <a href="mailto:k.lohith934613@gmail.com" class="btn btn-fill">Send a Message</a>
+      </div>
+      <div class="contact-right reveal">
+        <div class="contact-row"><span class="contact-row-label">Email</span><span class="contact-row-val"><a href="mailto:k.lohith934613@gmail.com" class="contact-link">k.lohith934613@gmail.com</a></span></div>
+        <div class="contact-row"><span class="contact-row-label">Phone</span><span class="contact-row-val"><a href="tel:9989251209" class="contact-link">+91 9989251209</a></span></div>
+        <div class="contact-row"><span class="contact-row-label">Location</span><span class="contact-row-val">Anantapur, Andhra Pradesh — 515641</span></div>
+        <div class="contact-row"><span class="contact-row-label">Languages</span><span class="contact-row-val">English · Telugu · Tamil</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2025 Kandukuru Lohith Reddy</span>
+    <span>Full Stack &amp; Mobile Developer</span>
+  </footer>
+
+  <script>
+    /* scroll reveal */
+    const obs = new IntersectionObserver(es => {
+      es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+    }, {threshold:0.08});
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    /* ── INK BLEED THEME TOGGLE ── */
+    const toggleBtn = document.getElementById('theme-toggle');
+    const ripple    = document.getElementById('theme-ripple');
+    const root      = document.documentElement;
+    let busy = false;
+
+    toggleBtn.addEventListener('click', function() {
+      if (busy) return;
+      busy = true;
+
+      const isDark    = root.getAttribute('data-theme') === 'dark';
+      const nextTheme = isDark ? 'light' : 'dark';
+      const nextBg    = isDark ? '#f9f9f7' : '#0c0c0c';
+
+      // Button center coords
+      const r  = toggleBtn.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top  + r.height / 2;
+
+      // Ripple must reach farthest screen corner
+      const maxR = Math.hypot(
+        Math.max(cx, window.innerWidth  - cx),
+        Math.max(cy, window.innerHeight - cy)
+      ) + 10;
+      const diameter = maxR * 2;
+
+      // Set ripple position & color
+      ripple.style.cssText = `
+        left:${cx}px; top:${cy}px;
+        width:${diameter}px; height:${diameter}px;
+        background:${nextBg};
+        transform:translate(-50%,-50%) scale(0);
+        opacity:1;
+        transition:none;
+      `;
+
+      // Force reflow so transition fires
+      ripple.getBoundingClientRect();
+
+      // Expand
+      ripple.style.transition = 'transform 0.65s cubic-bezier(0.22,1,0.36,1)';
+      ripple.style.transform  = 'translate(-50%,-50%) scale(1)';
+
+      // Switch theme tokens at midpoint
+      setTimeout(() => root.setAttribute('data-theme', nextTheme), 320);
+
+      // Hide ripple after done
+      setTimeout(() => {
+        ripple.style.opacity   = '0';
+        ripple.style.transform = 'translate(-50%,-50%) scale(0)';
+        ripple.style.transition = 'none';
+        busy = false;
+      }, 700);
+    });
+  </script>
+</body>
+</html>
