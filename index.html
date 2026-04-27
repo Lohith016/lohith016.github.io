@@ -1,602 +1,1359 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lohith Reddy</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lohith Reddy — Full Stack & Mobile Developer</title>
+    <meta name="description"
+        content="Kandukuru Lohith Reddy — Full Stack & Mobile Developer specializing in Flutter, React, Node.js, and scalable backend systems. 3+ years of building production-grade web and mobile applications." />
+    <meta name="author" content="Kandukuru Lohith Reddy" />
 
-    /* ── THEME TOKENS ── */
-    :root {
-      --transition-theme: 0.55s cubic-bezier(0.77, 0, 0.175, 1);
-      --bg:        #f9f9f7;
-      --bg-card:   #ececea;
-      --fg:        #0a0a0a;
-      --fg-muted:  #7a7a7a;
-      --border:    #ddddd8;
-      --chip-bg:   #e4e4e0;
-      --nav-blur:  rgba(249,249,247,0.92);
-    }
-    [data-theme="dark"] {
-      --bg:        #0c0c0c;
-      --bg-card:   #161616;
-      --fg:        #f0f0ee;
-      --fg-muted:  #5a5a5a;
-      --border:    #222220;
-      --chip-bg:   #1e1e1c;
-      --nav-blur:  rgba(12,12,12,0.92);
-    }
+    <!-- Open Graph -->
+    <meta property="og:title" content="Lohith Reddy — Full Stack & Mobile Developer" />
+    <meta property="og:description"
+        content="Building scalable applications with modern frameworks — from web to mobile. Flutter, React, Node.js, and more." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lohithreddy.dev" />
 
-    html { scroll-behavior: smooth; }
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lohith Reddy — Full Stack & Mobile Developer" />
+    <meta name="twitter:description"
+        content="Building scalable applications with modern frameworks — from web to mobile." />
 
-    body {
-      font-family: 'DM Mono', monospace;
-      background: var(--bg);
-      color: var(--fg);
-      font-size: 14px;
-      line-height: 1.7;
-      overflow-x: hidden;
-      transition: background var(--transition-theme), color var(--transition-theme);
-    }
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet" />
 
-    /* ══ INK RIPPLE OVERLAY ══ */
-    #theme-ripple {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      border-radius: 50%;
-      width: 1px; height: 1px;
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0);
-    }
-    #theme-ripple.expanding {
-      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.1s;
-      opacity: 1;
-    }
+    <!-- No-flicker theme init -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme ? savedTheme : (systemDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 
-    /* ══ THEME TOGGLE BUTTON ══ */
-    #theme-toggle {
-      position: relative;
-      width: 58px; height: 28px;
-      cursor: pointer;
-      background: none;
-      border: 1px solid var(--border);
-      padding: 0;
-      flex-shrink: 0;
-      transition: border-color var(--transition-theme);
-      overflow: hidden;
-    }
-    #theme-toggle:hover { border-color: var(--fg); }
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    .toggle-icons {
-      position: absolute; inset: 0;
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 0 6px;
-      pointer-events: none;
-    }
-    .ico { font-size: 11px; line-height: 1; }
-    .ico-sun  { color: #c8a84b; }
-    .ico-moon { color: #7a9ec4; }
+        /* ── THEME TOKENS ── */
+        :root {
+            --transition-theme: 0.55s cubic-bezier(0.77, 0, 0.175, 1);
+            --bg: #f9f9f7;
+            --bg-card: #ececea;
+            --fg: #0a0a0a;
+            --fg-muted: #7a7a7a;
+            --border: #ddddd8;
+            --chip-bg: #e4e4e0;
+            --nav-blur: rgba(249, 249, 247, 0.92);
+        }
 
-    .toggle-thumb {
-      position: absolute;
-      top: 3px;
-      left: 4px;
-      width: 20px; height: 20px;
-      background: var(--fg);
-      transition: left 0.45s cubic-bezier(0.77, 0, 0.175, 1),
-                  background var(--transition-theme);
-    }
-    [data-theme="dark"] .toggle-thumb { left: 32px; }
+        [data-theme="dark"] {
+            --bg: #0c0c0c;
+            --bg-card: #161616;
+            --fg: #f0f0ee;
+            --fg-muted: #5a5a5a;
+            --border: #222220;
+            --chip-bg: #1e1e1c;
+            --nav-blur: rgba(12, 12, 12, 0.92);
+        }
 
-    /* ══ NAV ══ */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1.2rem 4rem;
-      background: var(--nav-blur);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-      transition: background var(--transition-theme), border-color var(--transition-theme);
-    }
-    .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.1rem; letter-spacing: -0.02em;
-    }
-    .nav-right { display: flex; align-items: center; gap: 2.5rem; }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-    .nav-links a {
-      text-decoration: none; color: var(--fg-muted);
-      font-size: 0.73rem; letter-spacing: 0.12em; text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--fg); }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    /* ══ HERO ══ */
-    .hero {
-      min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
-      border-bottom: 1px solid var(--border); padding-top: 4.5rem;
-      transition: border-color var(--transition-theme);
-    }
-    .hero-left {
-      padding: 8rem 4rem 6rem;
-      display: flex; flex-direction: column; justify-content: center;
-      border-right: 1px solid var(--border);
-      transition: border-color var(--transition-theme);
-    }
-    .hero-tag {
-      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--fg-muted); margin-bottom: 2rem;
-      opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
-    }
-    .hero-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.8rem, 5vw, 4.5rem);
-      line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem;
-      opacity: 0; animation: fadeUp 0.6s 0.25s forwards;
-    }
-    .hero-desc {
-      color: var(--fg-muted); font-size: 0.85rem;
-      max-width: 34ch; line-height: 1.9;
-      opacity: 0; animation: fadeUp 0.6s 0.4s forwards;
-      transition: color var(--transition-theme);
-    }
-    .hero-cta {
-      margin-top: 3rem; display: flex; gap: 1rem;
-      opacity: 0; animation: fadeUp 0.6s 0.55s forwards;
-    }
-    .btn {
-      display: inline-block; padding: 0.75rem 1.8rem;
-      font-family: 'DM Mono', monospace; font-size: 0.73rem;
-      letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
-      border: 1px solid var(--fg); color: var(--fg); cursor: pointer;
-      transition: background 0.25s, color 0.25s, border-color var(--transition-theme);
-    }
-    .btn:hover { background: var(--fg); color: var(--bg); }
-    .btn-fill { background: var(--fg); color: var(--bg); }
-    .btn-fill:hover { background: transparent; color: var(--fg); }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--fg);
+            font-size: 14px;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background var(--transition-theme), color var(--transition-theme);
+        }
 
-    .hero-right {
-      padding: 8rem 4rem 6rem;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      opacity: 0; animation: fadeIn 0.8s 0.5s forwards;
-    }
-    .hero-stat {
-      border-top: 1px solid var(--border); padding: 1.8rem 0;
-      transition: border-color var(--transition-theme);
-    }
-    .hero-stat:last-child { border-bottom: 1px solid var(--border); }
-    .stat-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2.8rem; letter-spacing: -0.04em; line-height: 1;
-    }
-    .stat-label {
-      font-size: 0.7rem; color: var(--fg-muted);
-      letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.4rem;
-      transition: color var(--transition-theme);
-    }
+        /* ══ INK RIPPLE OVERLAY ══ */
+        #theme-ripple {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 50%;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
 
-    /* ══ SECTIONS ══ */
-    section { border-bottom: 1px solid var(--border); transition: border-color var(--transition-theme); }
-    .section-header {
-      display: grid; grid-template-columns: 240px 1fr;
-      padding: 3.5rem 4rem; border-bottom: 1px solid var(--border); align-items: baseline;
-      transition: border-color var(--transition-theme);
-    }
-    .section-label {
-      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--fg-muted); transition: color var(--transition-theme);
-    }
-    .section-title { font-family: 'DM Serif Display', serif; font-size: 2rem; letter-spacing: -0.02em; }
+        #theme-ripple.expanding {
+            transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.1s;
+            opacity: 1;
+        }
 
-    /* ══ EXPERIENCE ══ */
-    .exp-item {
-      display: grid; grid-template-columns: 240px 1fr;
-      padding: 3rem 4rem; border-bottom: 1px solid var(--border);
-      transition: background 0.2s, border-color var(--transition-theme);
-    }
-    .exp-item:last-child { border-bottom: none; }
-    .exp-item:hover { background: var(--bg-card); }
-    .exp-date { font-size: 0.7rem; color: var(--fg-muted); letter-spacing: 0.08em; margin-bottom: 0.5rem; transition: color var(--transition-theme); }
-    .exp-company { font-size: 0.78rem; color: var(--fg-muted); transition: color var(--transition-theme); }
-    .exp-role { font-family: 'DM Serif Display', serif; font-size: 1.4rem; letter-spacing: -0.02em; margin-bottom: 1rem; }
-    .exp-desc { font-size: 0.82rem; color: var(--fg-muted); line-height: 1.9; transition: color var(--transition-theme); }
-    .exp-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
-    .tag {
-      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.3rem 0.8rem; border: 1px solid var(--border); color: var(--fg-muted);
-      transition: border-color var(--transition-theme), color var(--transition-theme);
-    }
+        /* ══ THEME TOGGLE BUTTON ══ */
+        #theme-toggle {
+            position: relative;
+            width: 58px;
+            height: 28px;
+            cursor: pointer;
+            background: none;
+            border: 1px solid var(--border);
+            padding: 0;
+            flex-shrink: 0;
+            transition: border-color var(--transition-theme);
+            overflow: hidden;
+        }
 
-    /* ══ SKILLS ══ */
-    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; }
-    .skill-group {
-      padding: 2.8rem 4rem; border-bottom: 1px solid var(--border);
-      transition: border-color var(--transition-theme);
-    }
-    .skill-group:nth-child(odd) { border-right: 1px solid var(--border); }
-    .skill-group-label {
-      font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--fg-muted); margin-bottom: 1.2rem; transition: color var(--transition-theme);
-    }
-    .skill-items { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-    .skill-chip {
-      font-size: 0.78rem; padding: 0.4rem 1rem;
-      background: var(--chip-bg); border: 1px solid var(--border);
-      transition: background var(--transition-theme), border-color var(--transition-theme);
-    }
+        #theme-toggle:hover {
+            border-color: var(--fg);
+        }
 
-    /* ══ EDUCATION ══ */
-    .edu-item {
-      display: grid; grid-template-columns: 240px 1fr;
-      padding: 2.5rem 4rem; border-bottom: 1px solid var(--border);
-      transition: border-color var(--transition-theme);
-    }
-    .edu-item:last-child { border-bottom: none; }
-    .edu-year { font-size: 0.7rem; color: var(--fg-muted); letter-spacing: 0.08em; transition: color var(--transition-theme); }
-    .edu-degree { font-family: 'DM Serif Display', serif; font-size: 1.2rem; margin-bottom: 0.3rem; }
-    .edu-school { font-size: 0.78rem; color: var(--fg-muted); transition: color var(--transition-theme); }
-    .edu-score { font-size: 0.73rem; color: var(--fg-muted); margin-top: 0.3rem; transition: color var(--transition-theme); }
+        .toggle-icons {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6px;
+            pointer-events: none;
+        }
 
-    /* ══ CERTS ══ */
-    .cert-grid { display: grid; grid-template-columns: repeat(3,1fr); }
-    .cert-item {
-      padding: 2rem 2.5rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      transition: background 0.2s, border-color var(--transition-theme);
-    }
-    .cert-item:hover { background: var(--bg-card); }
-    .cert-item:nth-child(3n) { border-right: none; }
-    .cert-num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--border); line-height: 1; margin-bottom: 0.8rem; transition: color var(--transition-theme); }
-    .cert-name { font-size: 0.8rem; line-height: 1.5; }
-    .cert-org { font-size: 0.68rem; color: var(--fg-muted); margin-top: 0.3rem; transition: color var(--transition-theme); }
+        .ico {
+            font-size: 11px;
+            line-height: 1;
+        }
 
-    /* ══ CONTACT ══ */
-    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; }
-    .contact-left { padding: 5rem 4rem; border-right: 1px solid var(--border); transition: border-color var(--transition-theme); }
-    .contact-heading { font-family: 'DM Serif Display', serif; font-size: 2.8rem; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 2rem; }
-    .contact-right { padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center; gap: 2rem; }
-    .contact-row {
-      display: flex; flex-direction: column; gap: 0.3rem;
-      border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;
-      transition: border-color var(--transition-theme);
-    }
-    .contact-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .contact-row-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); transition: color var(--transition-theme); }
-    .contact-row-val { font-size: 0.88rem; }
-    a.contact-link { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--border); transition: border-color 0.2s, color var(--transition-theme); }
-    a.contact-link:hover { border-color: var(--fg); }
+        .ico-sun {
+            color: #c8a84b;
+        }
 
-    /* ══ FOOTER ══ */
-    footer {
-      padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.68rem; color: var(--fg-muted); letter-spacing: 0.08em;
-      transition: color var(--transition-theme);
-    }
+        .ico-moon {
+            color: #7a9ec4;
+        }
 
-    /* ══ ANIMATIONS ══ */
-    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.5s ease, transform 0.5s ease; }
-    .reveal.visible { opacity:1; transform:none; }
+        .toggle-thumb {
+            position: absolute;
+            top: 3px;
+            left: 4px;
+            width: 20px;
+            height: 20px;
+            background: var(--fg);
+            transition: left 0.45s cubic-bezier(0.77, 0, 0.175, 1),
+                background var(--transition-theme);
+        }
 
-    /* ══ RESPONSIVE ══ */
-    @media(max-width:768px){
-      nav{padding:1rem 1.2rem;}
-      .nav-links{display:none;}
-      .hero,.contact-inner{grid-template-columns:1fr;}
-      .hero-left{padding:7rem 1.5rem 3rem;border-right:none;}
-      .hero-right{padding:2rem 1.5rem 4rem;}
-      .section-header,.exp-item,.edu-item{grid-template-columns:1fr;}
-      .section-header{padding:2rem 1.5rem;}
-      .exp-item{padding:2rem 1.5rem;}
-      .edu-item{padding:2rem 1.5rem;}
-      .skills-grid{grid-template-columns:1fr;}
-      .skill-group{padding:2rem 1.5rem;}
-      .skill-group:nth-child(odd){border-right:none;}
-      .cert-grid{grid-template-columns:1fr 1fr;}
-      .contact-left{padding:3rem 1.5rem;border-right:none;}
-      .contact-right{padding:2rem 1.5rem 3rem;}
-      footer{padding:1.5rem;flex-direction:column;gap:0.4rem;text-align:center;}
-    }
-  </style>
+        [data-theme="dark"] .toggle-thumb {
+            left: 32px;
+        }
+
+        /* ══ NAV ══ */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 4rem;
+            background: var(--nav-blur);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+            transition: background var(--transition-theme), border-color var(--transition-theme);
+        }
+
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--fg-muted);
+            font-size: 0.73rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--fg);
+        }
+
+        /* ══ SOCIAL LINKS ══ */
+        .nav-social {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            color: var(--fg-muted);
+            text-decoration: none;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+
+        .social-link:hover {
+            border-color: var(--fg);
+            color: var(--fg);
+            background: var(--bg-card);
+        }
+
+        .social-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* ══ HAMBURGER MENU ══ */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            z-index: 310;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 1.5px;
+            background: var(--fg);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 300;
+            background: var(--bg);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--fg);
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            transition: color 0.2s;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--fg-muted);
+        }
+
+        .mobile-menu .mobile-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* ══ HERO ══ */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+            padding-top: 4.5rem;
+            transition: border-color var(--transition-theme);
+        }
+
+        .hero-left {
+            padding: 8rem 4rem 6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid var(--border);
+            transition: border-color var(--transition-theme);
+        }
+
+        .hero-tag {
+            font-size: 0.68rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--fg-muted);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.1s forwards;
+        }
+
+        .hero-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.8rem, 5vw, 4.5rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.25s forwards;
+        }
+
+        .hero-desc {
+            color: var(--fg-muted);
+            font-size: 0.85rem;
+            max-width: 34ch;
+            line-height: 1.9;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.4s forwards;
+            transition: color var(--transition-theme);
+        }
+
+        .hero-cta {
+            margin-top: 3rem;
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.55s forwards;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.8rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.73rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid var(--fg);
+            color: var(--fg);
+            cursor: pointer;
+            transition: background 0.25s, color 0.25s, border-color var(--transition-theme);
+        }
+
+        .btn:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .btn-fill {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .btn-fill:hover {
+            background: transparent;
+            color: var(--fg);
+        }
+
+        .hero-right {
+            padding: 8rem 4rem 6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.5s forwards;
+        }
+
+        .hero-stat {
+            border-top: 1px solid var(--border);
+            padding: 1.8rem 0;
+            transition: border-color var(--transition-theme);
+        }
+
+        .hero-stat:last-child {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-num {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.8rem;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--fg-muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            transition: color var(--transition-theme);
+        }
+
+        /* ══ SECTIONS ══ */
+        section {
+            border-bottom: 1px solid var(--border);
+            transition: border-color var(--transition-theme);
+        }
+
+        .section-header {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            padding: 3.5rem 4rem;
+            border-bottom: 1px solid var(--border);
+            align-items: baseline;
+            transition: border-color var(--transition-theme);
+        }
+
+        .section-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--fg-muted);
+            transition: color var(--transition-theme);
+        }
+
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* ══ EXPERIENCE ══ */
+        .exp-item {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            padding: 3rem 4rem;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s, border-color var(--transition-theme);
+        }
+
+        .exp-item:last-child {
+            border-bottom: none;
+        }
+
+        .exp-item:hover {
+            background: var(--bg-card);
+        }
+
+        .exp-date {
+            font-size: 0.7rem;
+            color: var(--fg-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+            transition: color var(--transition-theme);
+        }
+
+        .exp-company {
+            font-size: 0.78rem;
+            color: var(--fg-muted);
+            transition: color var(--transition-theme);
+        }
+
+        .exp-role {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.4rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .exp-desc {
+            font-size: 0.82rem;
+            color: var(--fg-muted);
+            line-height: 1.9;
+            transition: color var(--transition-theme);
+        }
+
+        .exp-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.2rem;
+        }
+
+        .tag {
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.8rem;
+            border: 1px solid var(--border);
+            color: var(--fg-muted);
+            transition: border-color var(--transition-theme), color var(--transition-theme);
+        }
+
+        /* ══ SKILLS ══ */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .skill-group {
+            padding: 2.8rem 4rem;
+            border-bottom: 1px solid var(--border);
+            transition: border-color var(--transition-theme);
+        }
+
+        .skill-group:nth-child(odd) {
+            border-right: 1px solid var(--border);
+        }
+
+        .skill-group-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--fg-muted);
+            margin-bottom: 1.2rem;
+            transition: color var(--transition-theme);
+        }
+
+        .skill-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .skill-chip {
+            font-size: 0.78rem;
+            padding: 0.4rem 1rem;
+            background: var(--chip-bg);
+            border: 1px solid var(--border);
+            transition: background var(--transition-theme), border-color var(--transition-theme);
+        }
+
+        /* ══ EDUCATION ══ */
+        .edu-item {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            padding: 2.5rem 4rem;
+            border-bottom: 1px solid var(--border);
+            transition: border-color var(--transition-theme);
+        }
+
+        .edu-item:last-child {
+            border-bottom: none;
+        }
+
+        .edu-year {
+            font-size: 0.7rem;
+            color: var(--fg-muted);
+            letter-spacing: 0.08em;
+            transition: color var(--transition-theme);
+        }
+
+        .edu-degree {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .edu-school {
+            font-size: 0.78rem;
+            color: var(--fg-muted);
+            transition: color var(--transition-theme);
+        }
+
+        .edu-score {
+            font-size: 0.73rem;
+            color: var(--fg-muted);
+            margin-top: 0.3rem;
+            transition: color var(--transition-theme);
+        }
+
+        /* ══ CERTS ══ */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .cert-item {
+            padding: 2rem 2.5rem;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s, border-color var(--transition-theme);
+        }
+
+        .cert-item:hover {
+            background: var(--bg-card);
+        }
+
+        .cert-item:nth-child(3n) {
+            border-right: none;
+        }
+
+        .cert-num {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--border);
+            line-height: 1;
+            margin-bottom: 0.8rem;
+            transition: color var(--transition-theme);
+        }
+
+        .cert-name {
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .cert-org {
+            font-size: 0.68rem;
+            color: var(--fg-muted);
+            margin-top: 0.3rem;
+            transition: color var(--transition-theme);
+        }
+
+        /* ══ CONTACT ══ */
+        .contact-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .contact-left {
+            padding: 5rem 4rem;
+            border-right: 1px solid var(--border);
+            transition: border-color var(--transition-theme);
+        }
+
+        .contact-heading {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.8rem;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+        }
+
+        .contact-right {
+            padding: 5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .contact-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            transition: border-color var(--transition-theme);
+        }
+
+        .contact-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .contact-row-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--fg-muted);
+            transition: color var(--transition-theme);
+        }
+
+        .contact-row-val {
+            font-size: 0.88rem;
+        }
+
+        .contact-row-val .social-inline {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .contact-row-val .social-inline a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        a.contact-link {
+            color: var(--fg);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.2s, color var(--transition-theme);
+        }
+
+        a.contact-link:hover {
+            border-color: var(--fg);
+        }
+
+        /* ══ FOOTER ══ */
+        footer {
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.68rem;
+            color: var(--fg-muted);
+            letter-spacing: 0.08em;
+            transition: color var(--transition-theme);
+        }
+
+        /* ══ ANIMATIONS ══ */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ══ RESPONSIVE ══ */
+        @media(max-width:768px) {
+            nav {
+                padding: 1rem 1.2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-social {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero,
+            .contact-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-left {
+                padding: 7rem 1.5rem 3rem;
+                border-right: none;
+            }
+
+            .hero-right {
+                padding: 2rem 1.5rem 4rem;
+            }
+
+            .section-header,
+            .exp-item,
+            .edu-item {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .exp-item {
+                padding: 2rem 1.5rem;
+            }
+
+            .edu-item {
+                padding: 2rem 1.5rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skill-group {
+                padding: 2rem 1.5rem;
+            }
+
+            .skill-group:nth-child(odd) {
+                border-right: none;
+            }
+
+            .cert-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .contact-left {
+                padding: 3rem 1.5rem;
+                border-right: none;
+            }
+
+            .contact-right {
+                padding: 2rem 1.5rem 3rem;
+            }
+
+            footer {
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 0.4rem;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- INK RIPPLE -->
-  <div id="theme-ripple"></div>
+    <!-- INK RIPPLE -->
+    <div id="theme-ripple"></div>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">Lohith</div>
-    <div class="nav-right">
-      <ul class="nav-links">
-        <li><a href="#experience">Work</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#education">Education</a></li>
-          <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <button id="theme-toggle" aria-label="Toggle theme">
-        <div class="toggle-icons">
-          <span class="ico ico-sun">☀</span>
-          <span class="ico ico-moon">☽</span>
+    <!-- MOBILE MENU OVERLAY -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#experience" class="mobile-nav-link">Work</a>
+        <a href="#skills" class="mobile-nav-link">Skills</a>
+        <a href="#education" class="mobile-nav-link">Education</a>
+        <a href="#projects" class="mobile-nav-link">Projects</a>
+        <a href="#contact" class="mobile-nav-link">Contact</a>
+        <div class="mobile-social">
+            <a href="https://github.com/lohithreddy" target="_blank" rel="noopener" class="social-link"
+                aria-label="GitHub">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+            </a>
+            <a href="https://linkedin.com/in/lohithreddy" target="_blank" rel="noopener" class="social-link"
+                aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+            </a>
         </div>
-        <div class="toggle-thumb"></div>
-      </button>
     </div>
-  </nav>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-left">
-      <p class="hero-tag">Full Stack &amp; Mobile Developer</p>
-      <h1 class="hero-name">Kandukuru<br>Lohith<br>Reddy</h1>
-      <p class="hero-desc">Building scalable applications with modern frameworks — from web to mobile. Passionate about clean code and optimized performance.</p>
-      <div class="hero-cta">
-        <a href="#experience" class="btn btn-fill">View Work</a>
-        <a href="#contact" class="btn">Get in Touch</a>
-      </div>
+    <!-- NAV -->
+    <nav>
+        <div class="nav-logo">Lohith</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#experience">Work</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-social">
+                <!-- <a href="https://github.com/lohithreddy" target="_blank" rel="noopener" class="social-link" aria-label="GitHub">
+                <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a> -->
+                <a href="https://www.linkedin.com/in/lohith1616" target="_blank" rel="noopener" class="social-link"
+                    aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    </svg>
+                </a>
+            </div>
+            <button id="theme-toggle" aria-label="Toggle theme">
+                <div class="toggle-icons">
+                    <span class="ico ico-sun">☀</span>
+                    <span class="ico ico-moon">☽</span>
+                </div>
+                <div class="toggle-thumb"></div>
+            </button>
+            <button class="hamburger" id="hamburger" aria-label="Open menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-left">
+            <p class="hero-tag">Full Stack &amp; Mobile Developer</p>
+            <h1 class="hero-name">Kandukuru<br>Lohith<br>Reddy</h1>
+            <p class="hero-desc">Building scalable applications with modern frameworks — from web to mobile. Passionate
+                about clean code and optimized performance.</p>
+            <div class="hero-cta">
+                <a href="#experience" class="btn btn-fill">View Work</a>
+                <a href="#contact" class="btn">Get in Touch</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-stat">
+                <div class="stat-num">3+</div>
+                <div class="stat-label">Years of Building</div>
+            </div>
+            <div class="hero-stat">
+                <div class="stat-num">6</div>
+                <div class="stat-label">Certifications</div>
+            </div>
+            <div class="hero-stat">
+                <div class="stat-num">3</div>
+                <div class="stat-label">Languages Spoken</div>
+            </div>
+        </div>
     </div>
-    <div class="hero-right">
-      <div class="hero-stat"><div class="stat-num">3+</div><div class="stat-label">Years of Building</div></div>
-      <div class="hero-stat"><div class="stat-num">6</div><div class="stat-label">Certifications</div></div>
-      <div class="hero-stat"><div class="stat-num">3</div><div class="stat-label">Languages Spoken</div></div>
-    </div>
-  </div>
 
-  <!-- EXPERIENCE -->
-  <section id="experience">
-    <div class="section-header reveal"><span class="section-label">Work</span><h2 class="section-title">Experience</h2></div>
-  <div class="exp-item reveal">
-  <div>
-    <div class="exp-date">Jan 2025 — Present</div>
-    <div class="exp-company">Techlathon</div>
-  </div>
-  <div>
-    <div class="exp-role">Full Stack & Mobile Developer</div>
-    <p class="exp-desc">
-  Contributing to multiple production-grade applications across web and mobile platforms, focusing on feature development, integrations, and system performance.
-  <br><br>
-  • Contributed to an administration management system by improving workflows, handling user data operations, and integrating backend services.<br>
-  • Worked on a cross-platform Learning Management System (LMS), developing mobile (Flutter) and web features.<br>
-  • Implemented payment systems:
-    – Integrated Razorpay using backend APIs and webhook handling for secure web transactions<br>
-    – Implemented in-app purchases for iOS and Android platforms<br>
-    – Configured products and handled end-to-end deployment to App Store and Play Store<br>
-  • Contributed to a QR-based user verification system designed for high-volume concurrent scanning, ensuring low-latency processing and reliable real-time validation under load.<br>
-  • Designed and integrated REST APIs to enable seamless communication between mobile, web, and backend systems.<br>
-  • Worked across frontend, backend, and mobile layers, taking ownership of features from development to deployment.
-</p>
-    <div class="exp-tags">
-      <span class="tag">Full Stack</span>
-      <span class="tag">Flutter</span>
-      <span class="tag">React / Next.js</span>
-      <span class="tag">Razorpay</span>
-      <span class="tag">In-App Purchase</span>
-      <span class="tag">App Store</span>
-      <span class="tag">Play Store</span>
-      <span class="tag">Real-time Systems</span>
-    </div>
-  </div>
-</div>
-</div>
-    <div class="exp-item reveal">
-      <div><div class="exp-date">Jun 2024 — Jul 2024</div><div class="exp-company">Null Class</div></div>
-      <div>
-        <div class="exp-role">Project Intern — Web Design &amp; Dev</div>
-        <p class="exp-desc">Developed a company portfolio website with a rewards system. Delivered an optimized front-end and integrated data storage with authentication.</p>
-        <div class="exp-tags"><span class="tag">React.js</span><span class="tag">Next.js</span><span class="tag">Tailwind</span><span class="tag">MongoDB</span><span class="tag">Firebase</span></div>
-      </div>
-    </div>
-    <div class="exp-item reveal">
-      <div><div class="exp-date">Completed Apr 2024</div><div class="exp-company">Infosys Springboard</div></div>
-      <div>
-        <div class="exp-role">Full Stack Development Intern</div>
-        <p class="exp-desc">Gained hands-on full-stack experience building a dynamic web application following best coding practices across backend and database layers.</p>
-        <div class="exp-tags"><span class="tag">Node.js</span><span class="tag">Django</span><span class="tag">PostgreSQL</span></div>
-      </div>
-    </div>
-  </section>
+    <!-- EXPERIENCE -->
+    <section id="experience">
+        <div class="section-header reveal">
+            <span class="section-label">Work</span>
+            <h2 class="section-title">Experience</h2>
+        </div>
+        <div class="exp-item reveal">
+            <div>
+                <div class="exp-date">Jan 2025 — Present</div>
+                <div class="exp-company">Techlathon</div>
+            </div>
+            <div>
+                <div class="exp-role">Full Stack & Mobile Developer</div>
+                <p class="exp-desc">Contributing to multiple production-grade applications across web and mobile
+                    platforms, focusing on feature development, integrations, and system performance.<br><br>•
+                    Contributed to an administration management system by improving workflows, handling user data
+                    operations, and integrating backend services.<br>• Worked on a cross-platform Learning Management
+                    System (LMS), developing mobile (Flutter) and web features.<br>• Implemented payment systems: –
+                    Integrated Razorpay using backend APIs and webhook handling for secure web transactions<br>–
+                    Implemented in-app purchases for iOS and Android platforms<br>– Configured products and handled
+                    end-to-end deployment to App Store and Play Store<br>• Contributed to a QR-based user verification
+                    system designed for high-volume concurrent scanning, ensuring low-latency processing and reliable
+                    real-time validation under load.<br>• Designed and integrated REST APIs to enable seamless
+                    communication between mobile, web, and backend systems.<br>• Worked across frontend, backend, and
+                    mobile layers, taking ownership of features from development to deployment.</p>
+                <div class="exp-tags">
+                    <span class="tag">Full Stack</span>
+                    <span class="tag">Flutter</span>
+                    <span class="tag">React / Next.js</span>
+                    <span class="tag">Razorpay</span>
+                    <span class="tag">In-App Purchase</span>
+                    <span class="tag">App Store</span>
+                    <span class="tag">Play Store</span>
+                    <span class="tag">Real-time Systems</span>
+                </div>
+            </div>
+        </div>
+        <div class="exp-item reveal">
+            <div>
+                <div class="exp-date">Jun 2024 — Jul 2024</div>
+                <div class="exp-company">Null Class</div>
+            </div>
+            <div>
+                <div class="exp-role">Project Intern — Web Design &amp; Dev</div>
+                <p class="exp-desc">Developed a company portfolio website with a rewards system. Delivered an optimized
+                    front-end and integrated data storage with authentication.</p>
+                <div class="exp-tags">
+                    <span class="tag">React.js</span>
+                    <span class="tag">Next.js</span>
+                    <span class="tag">Tailwind</span>
+                    <span class="tag">MongoDB</span>
+                    <span class="tag">Firebase</span>
+                </div>
+            </div>
+        </div>
+        <div class="exp-item reveal">
+            <div>
+                <div class="exp-date">Completed Apr 2024</div>
+                <div class="exp-company">Infosys Springboard</div>
+            </div>
+            <div>
+                <div class="exp-role">Full Stack Development Intern</div>
+                <p class="exp-desc">Gained hands-on full-stack experience building a dynamic web application following
+                    best coding practices across backend and database layers.</p>
+                <div class="exp-tags">
+                    <span class="tag">Node.js</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">PostgreSQL</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- SKILLS -->
-  <section id="skills">
-    <div class="section-header reveal"><span class="section-label">Capabilities</span><h2 class="section-title">Skills</h2></div>
-    <div class="skills-grid">
-      <div class="skill-group reveal"><div class="skill-group-label">Languages</div><div class="skill-items"><span class="skill-chip">Python</span><span class="skill-chip">Java</span><span class="skill-chip">Go</span></div></div>
-      <div class="skill-group reveal"><div class="skill-group-label">Frameworks &amp; Libraries</div><div class="skill-items"><span class="skill-chip">React.js</span><span class="skill-chip">Next.js</span><span class="skill-chip">Node.js</span></div></div>
-      <div class="skill-group reveal"><div class="skill-group-label">Databases</div><div class="skill-items"><span class="skill-chip">MongoDB</span><span class="skill-chip">MySQL</span><span class="skill-chip">PostgreSQL</span></div></div>
-      <div class="skill-group reveal"><div class="skill-group-label">Tools &amp; Technologies</div><div class="skill-items"><span class="skill-chip">Git</span><span class="skill-chip">Docker</span><span class="skill-chip">GitHub</span><span class="skill-chip">Turbo</span><span class="skill-chip">pnpm</span></div></div>
-    </div>
-  </section>
+    <!-- SKILLS -->
+    <section id="skills">
+        <div class="section-header reveal">
+            <span class="section-label">Capabilities</span>
+            <h2 class="section-title">Skills</h2>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-group reveal">
+                <div class="skill-group-label">Languages</div>
+                <div class="skill-items">
+                    <span class="skill-chip">JavaScript</span>
+                    <span class="skill-chip">TypeScript</span>
+                    <span class="skill-chip">Dart</span>
+                    <span class="skill-chip">Python</span>
+                    <span class="skill-chip">Java</span>
+                    <span class="skill-chip">Go</span>
+                </div>
+            </div>
+            <div class="skill-group reveal">
+                <div class="skill-group-label">Frameworks &amp; Libraries</div>
+                <div class="skill-items">
+                    <span class="skill-chip">Flutter</span>
+                    <span class="skill-chip">React.js</span>
+                    <span class="skill-chip">Next.js</span>
+                    <span class="skill-chip">Node.js</span>
+                    <span class="skill-chip">Express.js</span>
+                    <span class="skill-chip">Django</span>
+                </div>
+            </div>
+            <div class="skill-group reveal">
+                <div class="skill-group-label">Databases &amp; Services</div>
+                <div class="skill-items">
+                    <span class="skill-chip">MongoDB</span>
+                    <span class="skill-chip">MySQL</span>
+                    <span class="skill-chip">PostgreSQL</span>
+                    <span class="skill-chip">Firebase</span>
+                </div>
+            </div>
+            <div class="skill-group reveal">
+                <div class="skill-group-label">Tools &amp; Technologies</div>
+                <div class="skill-items">
+                    <span class="skill-chip">Git</span>
+                    <span class="skill-chip">Docker</span>
+                    <span class="skill-chip">GitHub</span>
+                    <span class="skill-chip">Turbo</span>
+                    <span class="skill-chip">pnpm</span>
+                    <span class="skill-chip">REST APIs</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- EDUCATION -->
-  <section id="education">
-    <div class="section-header reveal"><span class="section-label">Background</span><h2 class="section-title">Education</h2></div>
-    <div class="edu-item reveal"><div class="edu-year">2025 (Expected)</div><div><div class="edu-degree">B.E. in Computer Science &amp; Engineering</div><div class="edu-school">Adhiyamaan College of Engineering, Hosur</div><div class="edu-score">CGPA — 6.98</div></div></div>
-    <div class="edu-item reveal"><div class="edu-year">2021</div><div><div class="edu-degree">Intermediate</div><div class="edu-school">Narayana Junior College, Anantapur, AP</div><div class="edu-score">Score — 658</div></div></div>
-    <div class="edu-item reveal"><div class="edu-year">2019</div><div><div class="edu-degree">SSC</div><div class="edu-school">Sri Chaitanya Techno School, Anantapur, AP</div><div class="edu-score">Score — 95%</div></div></div>
-  </section>
+    <!-- EDUCATION -->
+    <section id="education">
+        <div class="section-header reveal">
+            <span class="section-label">Background</span>
+            <h2 class="section-title">Education</h2>
+        </div>
+        <div class="edu-item reveal">
+            <div class="edu-year">2025 (Expected)</div>
+            <div>
+                <div class="edu-degree">B.E. in Computer Science &amp; Engineering</div>
+                <div class="edu-school">Adhiyamaan College of Engineering, Hosur</div>
+                <div class="edu-score">CGPA — 6.98</div>
+            </div>
+        </div>
+        <div class="edu-item reveal">
+            <div class="edu-year">2021</div>
+            <div>
+                <div class="edu-degree">Intermediate</div>
+                <div class="edu-school">Narayana Junior College, Anantapur, AP</div>
+                <div class="edu-score">Score — 658</div>
+            </div>
+        </div>
+        <div class="edu-item reveal">
+            <div class="edu-year">2019</div>
+            <div>
+                <div class="edu-degree">SSC</div>
+                <div class="edu-school">Sri Chaitanya Techno School, Anantapur, AP</div>
+                <div class="edu-score">Score — 95%</div>
+            </div>
+        </div>
+    </section>
 
-  <!-- CERTIFICATIONS -->
-  <section>
-    <div class="section-header reveal"><span class="section-label">Achievements</span><h2 class="section-title">Certifications</h2></div>
-    <div class="cert-grid">
-      <div class="cert-item reveal"><div class="cert-num">01</div><div class="cert-name">Full Stack Development</div><div class="cert-org">Infosys Springboard</div></div>
-      <div class="cert-item reveal"><div class="cert-num">02</div><div class="cert-name">Web Design, Development &amp; Hosting</div><div class="cert-org">—</div></div>
-      <div class="cert-item reveal"><div class="cert-num">03</div><div class="cert-name">Full Stack Development with Django</div><div class="cert-org">Udemy</div></div>
-      <div class="cert-item reveal"><div class="cert-num">04</div><div class="cert-name">Ethical AI</div><div class="cert-org">Infosys Springboard</div></div>
-      <div class="cert-item reveal"><div class="cert-num">05</div><div class="cert-name">Introduction to Cybersecurity</div><div class="cert-org">Cisco Networking Academy</div></div>
-      <div class="cert-item reveal"><div class="cert-num">06</div><div class="cert-name">Smart India Hackathon Participant</div><div class="cert-org">SIH 2023</div></div>
-    </div>
-  </section>
-  <section id="projects">
-  <div class="section-header reveal">
-    <span class="section-label">Work</span>
-    <h2 class="section-title">Projects</h2>
-  </div>
+    <!-- CERTIFICATIONS -->
+    <section>
+        <div class="section-header reveal">
+            <span class="section-label">Achievements</span>
+            <h2 class="section-title">Certifications</h2>
+        </div>
+        <div class="cert-grid">
+            <div class="cert-item reveal">
+                <div class="cert-num">01</div>
+                <div class="cert-name">Full Stack Development</div>
+                <div class="cert-org">Infosys Springboard</div>
+            </div>
+            <div class="cert-item reveal">
+                <div class="cert-num">02</div>
+                <div class="cert-name">Web Design, Development &amp; Hosting</div>
+                <div class="cert-org">—</div>
+            </div>
+            <div class="cert-item reveal">
+                <div class="cert-num">03</div>
+                <div class="cert-name">Full Stack Development with Django</div>
+                <div class="cert-org">Udemy</div>
+            </div>
+            <div class="cert-item reveal">
+                <div class="cert-num">04</div>
+                <div class="cert-name">Ethical AI</div>
+                <div class="cert-org">Infosys Springboard</div>
+            </div>
+            <div class="cert-item reveal">
+                <div class="cert-num">05</div>
+                <div class="cert-name">Introduction to Cybersecurity</div>
+                <div class="cert-org">Cisco Networking Academy</div>
+            </div>
+            <div class="cert-item reveal">
+                <div class="cert-num">06</div>
+                <div class="cert-name">Smart India Hackathon Participant</div>
+                <div class="cert-org">SIH 2023</div>
+            </div>
+        </div>
+    </section>
 
-  <!-- LMS Project -->
-  <div class="exp-item reveal">
-    <div>
-      <div class="exp-date">2025</div>
-      <div class="exp-company">Learning Platform</div>
-    </div>
-    <div>
-      <div class="exp-role">LMS Web & Mobile Application</div>
-      <p class="exp-desc">
-        Developed a cross-platform Learning Management System supporting both mobile and web users.
-        <br><br>
-        • Built mobile application using Flutter and web platform using modern frameworks<br>
-        • Implemented payment systems using Razorpay and in-app purchases (iOS & Android)<br>
-        • Managed deployment to App Store and Play Store, including product configuration and release handling<br>
-        • Integrated backend APIs for authentication, course management, and user data processing<br>
-      </p>
-      <div class="exp-tags">
-        <span class="tag">Flutter</span>
-        <span class="tag">React / Next.js</span>
-        <span class="tag">Razorpay</span>
-        <span class="tag">In-App Purchase</span>
-        <span class="tag">API Integration</span>
-      </div>
-    </div>
-  </div>
+    <!-- PROJECTS -->
+    <section id="projects">
+        <div class="section-header reveal">
+            <span class="section-label">Work</span>
+            <h2 class="section-title">Projects</h2>
+        </div>
+        <!-- LMS Project -->
+        <div class="exp-item reveal">
+            <div>
+                <div class="exp-date">2025</div>
+                <div class="exp-company">Learning Platform</div>
+            </div>
+            <div>
+                <div class="exp-role">LMS Web & Mobile Application</div>
+                <p class="exp-desc">Developed a cross-platform Learning Management System supporting both mobile and web
+                    users.<br><br>• Built mobile application using Flutter and web platform using modern frameworks<br>•
+                    Implemented payment systems using Razorpay and in-app purchases (iOS & Android)<br>• Managed
+                    deployment to App Store and Play Store, including product configuration and release handling<br>•
+                    Integrated backend APIs for authentication, course management, and user data processing</p>
+                <div class="exp-tags">
+                    <span class="tag">Flutter</span>
+                    <span class="tag">React / Next.js</span>
+                    <span class="tag">Razorpay</span>
+                    <span class="tag">In-App Purchase</span>
+                    <span class="tag">API Integration</span>
+                </div>
+            </div>
+        </div>
+        <!-- QR System -->
+        <div class="exp-item reveal">
+            <div>
+                <div class="exp-date">2025</div>
+                <div class="exp-company">Real-time System</div>
+            </div>
+            <div>
+                <div class="exp-role">QR-Based User Verification System</div>
+                <p class="exp-desc">Developed a large-scale QR-based scanning and verification system.<br><br>• Handled
+                    100,000+ participants with 800+ concurrent scanning devices<br>• Enabled real-time QR validation and
+                    user data processing<br>• Designed for low-latency and high reliability under heavy load<br>•
+                    Integrated backend APIs for instant verification and response handling</p>
+                <div class="exp-tags">
+                    <span class="tag">Real-time</span>
+                    <span class="tag">QR Scanning</span>
+                    <span class="tag">Backend APIs</span>
+                    <span class="tag">Scalable Systems</span>
+                </div>
+            </div>
+        </div>
+        <!-- Admin System -->
+        <div class="exp-item reveal">
+            <div>
+                <div class="exp-date">2025</div>
+                <div class="exp-company">Management System</div>
+            </div>
+            <div>
+                <div class="exp-role">Administration Dashboard</div>
+                <p class="exp-desc">Contributed to a system for managing workflows, users, and operational
+                    data.<br><br>• Developed user management and workflow features<br>• Integrated backend services for
+                    data processing<br>• Improved system usability and performance through UI and API enhancements</p>
+                <div class="exp-tags">
+                    <span class="tag">Full Stack</span>
+                    <span class="tag">Dashboard</span>
+                    <span class="tag">API Integration</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- QR System -->
-  <div class="exp-item reveal">
-    <div>
-      <div class="exp-date">2025</div>
-      <div class="exp-company">Real-time System</div>
-    </div>
-    <div>
-      <div class="exp-role">QR-Based User Verification System</div>
-      <p class="exp-desc">
-        Developed a large-scale QR-based scanning and verification system.
-        <br><br>
-        • Handled 100,000+ participants with 800+ concurrent scanning devices<br>
-        • Enabled real-time QR validation and user data processing<br>
-        • Designed for low-latency and high reliability under heavy load<br>
-        • Integrated backend APIs for instant verification and response handling<br>
-      </p>
-      <div class="exp-tags">
-        <span class="tag">Real-time</span>
-        <span class="tag">QR Scanning</span>
-        <span class="tag">Backend APIs</span>
-        <span class="tag">Scalable Systems</span>
-      </div>
-    </div>
-  </div>
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="contact-inner">
+            <div class="contact-left reveal">
+                <h2 class="contact-heading">Let's work<br>together.</h2>
+                <a href="mailto:k.lohith934613@gmail.com" class="btn btn-fill">Send a Message</a>
+            </div>
+            <div class="contact-right reveal">
+                <div class="contact-row">
+                    <span class="contact-row-label">Email</span>
+                    <span class="contact-row-val"><a href="mailto:k.lohith934613@gmail.com"
+                            class="contact-link">k.lohith934613@gmail.com</a></span>
+                </div>
+                <div class="contact-row">
+                    <span class="contact-row-label">Phone</span>
+                    <span class="contact-row-val"><a href="tel:9989251209" class="contact-link">+91
+                            9989251209</a></span>
+                </div>
+                <div class="contact-row">
+                    <span class="contact-row-label">Location</span>
+                    <span class="contact-row-val">Anantapur, Andhra Pradesh — 515641</span>
+                </div>
+                <div class="contact-row">
+                    <span class="contact-row-label">Languages</span>
+                    <span class="contact-row-val">English · Telugu · Tamil</span>
+                </div>
+                <div class="contact-row">
+                    <span class="contact-row-label">Socials</span>
+                    <span class="contact-row-val">
+                        <span class="social-inline">
+                            <a href="https://github.com/lohithreddy" target="_blank" rel="noopener"
+                                class="contact-link">GitHub</a>
+                            <a href="https://linkedin.com/in/lohithreddy" target="_blank" rel="noopener"
+                                class="contact-link">LinkedIn</a>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- Admin System -->
-  <div class="exp-item reveal">
-    <div>
-      <div class="exp-date">2025</div>
-      <div class="exp-company">Management System</div>
-    </div>
-    <div>
-      <div class="exp-role">Administration Dashboard</div>
-      <p class="exp-desc">
-        Contributed to a system for managing workflows, users, and operational data.
-        <br><br>
-        • Developed user management and workflow features<br>
-        • Integrated backend services for data processing<br>
-        • Improved system usability and performance through UI and API enhancements<br>
-      </p>
-      <div class="exp-tags">
-        <span class="tag">Full Stack</span>
-        <span class="tag">Dashboard</span>
-        <span class="tag">API Integration</span>
-      </div>
-    </div>
-  </div>
+    <footer>
+        <span>© 2025 Kandukuru Lohith Reddy</span>
+        <span>Full Stack &amp; Mobile Developer</span>
+    </footer>
 
-</section>
+    <script>
+        /* scroll reveal */
+        const obs = new IntersectionObserver(es => {
+            es.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    obs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.08 });
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="contact-inner">
-      <div class="contact-left reveal">
-        <h2 class="contact-heading">Let's work<br>together.</h2>
-        <a href="mailto:k.lohith934613@gmail.com" class="btn btn-fill">Send a Message</a>
-      </div>
-      <div class="contact-right reveal">
-        <div class="contact-row"><span class="contact-row-label">Email</span><span class="contact-row-val"><a href="mailto:k.lohith934613@gmail.com" class="contact-link">k.lohith934613@gmail.com</a></span></div>
-        <div class="contact-row"><span class="contact-row-label">Phone</span><span class="contact-row-val"><a href="tel:9989251209" class="contact-link">+91 9989251209</a></span></div>
-        <div class="contact-row"><span class="contact-row-label">Location</span><span class="contact-row-val">Anantapur, Andhra Pradesh — 515641</span></div>
-        <div class="contact-row"><span class="contact-row-label">Languages</span><span class="contact-row-val">English · Telugu · Tamil</span></div>
-      </div>
-    </div>
-  </section>
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  <footer>
-    <span>© 2025 Kandukuru Lohith Reddy</span>
-    <span>Full Stack &amp; Mobile Developer</span>
-  </footer>
+        /* ── THEME SYSTEM ── */
+        const toggleBtn = document.getElementById('theme-toggle');
+        const ripple = document.getElementById('theme-ripple');
+        const root = document.documentElement;
 
-  <script>
-    /* scroll reveal */
-    const obs = new IntersectionObserver(es => {
-      es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
-    }, {threshold:0.08});
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        let busy = false;
 
-    /* ── INK BLEED THEME TOGGLE ── */
-    const toggleBtn = document.getElementById('theme-toggle');
-    const ripple    = document.getElementById('theme-ripple');
-    const root      = document.documentElement;
-    let busy = false;
+        // System preference listener
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    toggleBtn.addEventListener('click', function() {
-      if (busy) return;
-      busy = true;
+        systemPrefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+            }
+        });
 
-      const isDark    = root.getAttribute('data-theme') === 'dark';
-      const nextTheme = isDark ? 'light' : 'dark';
-      const nextBg    = isDark ? '#f9f9f7' : '#0c0c0c';
+        // Toggle button
+        toggleBtn.addEventListener('click', function () {
+            if (busy) return;
+            busy = true;
 
-      // Button center coords
-      const r  = toggleBtn.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top  + r.height / 2;
+            const isDark = root.getAttribute('data-theme') === 'dark';
+            const nextTheme = isDark ? 'light' : 'dark';
+            const nextBg = isDark ? '#f9f9f7' : '#0c0c0c';
 
-      // Ripple must reach farthest screen corner
-      const maxR = Math.hypot(
-        Math.max(cx, window.innerWidth  - cx),
-        Math.max(cy, window.innerHeight - cy)
-      ) + 10;
-      const diameter = maxR * 2;
+            // Button center coords
+            const r = toggleBtn.getBoundingClientRect();
+            const cx = r.left + r.width / 2;
+            const cy = r.top + r.height / 2;
 
-      // Set ripple position & color
-      ripple.style.cssText = `
-        left:${cx}px; top:${cy}px;
-        width:${diameter}px; height:${diameter}px;
-        background:${nextBg};
-        transform:translate(-50%,-50%) scale(0);
-        opacity:1;
-        transition:none;
-      `;
+            // Ripple size
+            const maxR = Math.hypot(
+                Math.max(cx, window.innerWidth - cx),
+                Math.max(cy, window.innerHeight - cy)
+            ) + 10;
 
-      // Force reflow so transition fires
-      ripple.getBoundingClientRect();
+            const diameter = maxR * 2;
 
-      // Expand
-      ripple.style.transition = 'transform 0.65s cubic-bezier(0.22,1,0.36,1)';
-      ripple.style.transform  = 'translate(-50%,-50%) scale(1)';
+            ripple.style.cssText = `
+    left:${cx}px; top:${cy}px;
+    width:${diameter}px; height:${diameter}px;
+    background:${nextBg};
+    transform:translate(-50%,-50%) scale(0);
+    opacity:1;
+    transition:none;
+  `;
 
-      // Switch theme tokens at midpoint
-      setTimeout(() => root.setAttribute('data-theme', nextTheme), 320);
+            ripple.getBoundingClientRect();
 
-      // Hide ripple after done
-      setTimeout(() => {
-        ripple.style.opacity   = '0';
-        ripple.style.transform = 'translate(-50%,-50%) scale(0)';
-        ripple.style.transition = 'none';
-        busy = false;
-      }, 700);
-    });
-  </script>
+            ripple.style.transition = 'transform 0.65s cubic-bezier(0.22,1,0.36,1)';
+            ripple.style.transform = 'translate(-50%,-50%) scale(1)';
+
+            // Apply theme + save preference
+            setTimeout(() => {
+                root.setAttribute('data-theme', nextTheme);
+                localStorage.setItem('theme', nextTheme);
+            }, 320);
+
+            setTimeout(() => {
+                ripple.style.opacity = '0';
+                ripple.style.transform = 'translate(-50%,-50%) scale(0)';
+                ripple.style.transition = 'none';
+                busy = false;
+            }, 700);
+        });
+
+        /* ── HAMBURGER MENU ── */
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
 </body>
-</html>
 
+</html>
